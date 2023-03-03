@@ -1,9 +1,10 @@
 const Product=require('../models/productModel');
 const ErrorHandler = require('../utils/errorhandler');
-
+const catchAsyncErrors=require("../middleware/catchAsyncErrors");
+const ApiFeatures = require('../utils/apiFeatures');
 
 //Create Product
-exports.createProduct=async(req,res,next)=>{
+exports.createProduct=catchAsyncErrors(async(req,res,next)=>{
     
     const product=await Product.create(req.body);
 
@@ -11,27 +12,32 @@ exports.createProduct=async(req,res,next)=>{
         success:true,
         product
     })
-}
+})
 
-//Get All Product
-exports.getAllProducts=async(req,res,next)=>{
+//Get All Products
+exports.getAllProducts=catchAsyncErrors(async(req,res,next)=>{
 
-    const products=await Product.find();
+    const resultPerPage=2;
+    const productCount=await Product.countDocuments();
 
-    if(!products){
-        return next(new ErrorHandler("Products not found",404))
-    }
-
+    const apiFeature=new ApiFeatures(Product.find(),req.query)
+    .search()
+    .filter()
+    .pagination(resultPerPage);
+    
+    const products=await apiFeature.query;
 
     res.status(200).json({
-        message:"Route is working fine"
+        success:true,
+        productCount,
+        products,
     })
 
-}
+})
 
 //Get product details
 
-exports.getProductDetails=async(req,res,next)=>{
+exports.getProductDetails=catchAsyncErrors(async(req,res,next)=>{
 
     const product=await Product.findById(req.params.id);
     
@@ -46,11 +52,11 @@ exports.getProductDetails=async(req,res,next)=>{
         product
     })
 
-}
+})
 
 //Update Product - Admin
 
-exports.updateProduct=async(req,res,next)=>{
+exports.updateProduct=catchAsyncErrors(async(req,res,next)=>{
 
     let product=Product.findById(req.params.id);
 
@@ -71,11 +77,11 @@ exports.updateProduct=async(req,res,next)=>{
         product
     })
 
-}
+})
 
 //Delete Product - Admin
 
-exports.deleteProduct=async(req,res,next)=>{
+exports.deleteProduct=catchAsyncErrors(async(req,res,next)=>{
 
     const product=await Product.findByIdAndDelete(req.params.id);
     
@@ -90,4 +96,4 @@ exports.deleteProduct=async(req,res,next)=>{
         success:true,
         message:"Product deleted successfully!"
     })
-}
+})
