@@ -6,6 +6,7 @@ const ApiFeatures = require('../utils/apiFeatures');
 //Create Product
 exports.createProduct=catchAsyncErrors(async(req,res,next)=>{
     
+    req.body.user=req.user.id
     const product=await Product.create(req.body);
 
     res.status(201).json({
@@ -97,3 +98,4 @@ exports.deleteProduct=catchAsyncErrors(async(req,res,next)=>{
         message:"Product deleted successfully!"
     })
 })
+
