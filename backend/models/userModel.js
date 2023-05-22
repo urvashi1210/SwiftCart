@@ -35,7 +35,8 @@ const userSchema=new mongoose.Schema({
     },
     role:{
         type:String,
-        default:'user'
+        default:'user',
+        required:true
     },
     createdAt:{
         type:Date,
@@ -68,7 +69,7 @@ userSchema.methods.comparePassword=async function(password){
 }
 
 //Generating Password Reset Token
-userSchema.methods.getResetPasswordToken=function(){
+userSchema.methods.getResetPasswordToken=async function(){
 
 //Generating token
 const resetToken=crypto.randomBytes(20).toString("hex");
