@@ -14,7 +14,7 @@ app.use('/api/v1',product);
 app.use('/api/v1',user);
 
 //Middleware for Error
-app.use(errorMiddleware)
+app.use(errorMiddleware);
 
-module.exports=app
+module.exports=app;
 
