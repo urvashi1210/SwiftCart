@@ -1,8 +1,8 @@
-const app=require('./app')
+const app=require('./app');
 
-const dotenv=require('dotenv')
+const dotenv=require('dotenv');
 
-const connectDatabase=require('./config/database.js')
+const connectDatabase=require('./config/database.js');
 
 //Handling uncaught Exception
 process.on('uncaughtException',(err)=>{
